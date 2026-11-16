@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c814ghsav3pla"]
+
+[ext_resource type="Script" uid="uid://dcljfmwkpo5f6" path="res://systems/time/time_system.gd" id="1_h601f"]
+
+[node name="TimeSystem" type="Node" unique_id=539058300]
+script = ExtResource("1_h601f")
+is_active = null

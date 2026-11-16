@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://bs5pvknuafvif"]
+
+[ext_resource type="Script" uid="uid://cekb0m4olf8a3" path="res://systems/wind/wind_system.gd" id="1_jrtqa"]
+[ext_resource type="Script" uid="uid://bfxgkn3sjkf8a" path="res://modules/state/state_machine.gd" id="2_tpukr"]
+[ext_resource type="Script" uid="uid://0vktp03j5eo5" path="res://systems/wind/state/gust.gd" id="3_ealum"]
+[ext_resource type="Script" uid="uid://6qw56o73ksxr" path="res://modules/state/state_fallback.gd" id="4_ealum"]
+[ext_resource type="Script" uid="uid://d4gnb2oj44l32" path="res://systems/wind/state/change_speed.gd" id="4_sl5w0"]
+[ext_resource type="Script" uid="uid://cqwmifs1f8nww" path="res://systems/wind/state/change_direction.gd" id="4_tpukr"]
+[ext_resource type="Script" uid="uid://d1so56lfbbtsd" path="res://modules/state/behaviors/random.gd" id="5_xjucv"]
+
+[node name="WindSystem" type="Node" unique_id=156583365]
+script = ExtResource("1_jrtqa")
+
+[node name="StateMachine" type="Node" parent="." unique_id=511542876]
+script = ExtResource("2_tpukr")
+metadata/_custom_type_script = "uid://bfxgkn3sjkf8a"
+
+[node name="Gust" type="Node" parent="StateMachine" unique_id=107115161 node_paths=PackedStringArray("wind_system")]
+script = ExtResource("3_ealum")
+wind_system = NodePath("../..")
+minimum_transition_speed = 3.5
+maximum_transition_speed = 5.0
+minimum_gust_speed = 2.5
+maximum_gust_speed = 6.0
+validations_per_second = 1.0
+metadata/_custom_type_script = "uid://ofbexg166pcj"
+
+[node name="StateBehaviorRandom" type="Node" parent="StateMachine/Gust" unique_id=1678731636]
+script = ExtResource("5_xjucv")
+chance = 0.02
+reactivate_chance = 0.02
+metadata/_custom_type_script = "uid://d1so56lfbbtsd"
+
+[node name="ChangeSpeed" type="Node" parent="StateMachine" unique_id=1696647447 node_paths=PackedStringArray("wind_system")]
+script = ExtResource("4_sl5w0")
+wind_system = NodePath("../..")
+validations_per_second = 3.0
+metadata/_custom_type_script = "uid://ofbexg166pcj"
+
+[node name="StateBehaviorRandom" type="Node" parent="StateMachine/ChangeSpeed" unique_id=1650038892]
+script = ExtResource("5_xjucv")
+metadata/_custom_type_script = "uid://d1so56lfbbtsd"
+
+[node name="ChangeDirection" type="Node" parent="StateMachine" unique_id=1893604990 node_paths=PackedStringArray("wind_system")]
+script = ExtResource("4_tpukr")
+wind_system = NodePath("../..")
+validations_per_second = 3.0
+metadata/_custom_type_script = "uid://ofbexg166pcj"
+
+[node name="StateBehaviorRandom" type="Node" parent="StateMachine/ChangeDirection" unique_id=1534163620]
+script = ExtResource("5_xjucv")
+chance = 0.005
+metadata/_custom_type_script = "uid://d1so56lfbbtsd"
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=90096344]
+script = ExtResource("4_ealum")
+metadata/_custom_type_script = "uid://6qw56o73ksxr"

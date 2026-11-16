@@ -1,0 +1,178 @@
+[gd_scene format=3 uid="uid://be20nplxxgdba"]
+
+[ext_resource type="PackedScene" uid="uid://bs5pvknuafvif" path="res://systems/wind/wind_system.tscn" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://c814ghsav3pla" path="res://systems/time/time_system.tscn" id="1_5vw27"]
+[ext_resource type="FontFile" uid="uid://bydy3w0umja88" path="res://assets/fusion-pixel-font-10px-proportional-ttf-v2026/fusion-pixel-10px-proportional-latin.ttf" id="2_0xm2m"]
+[ext_resource type="Shader" uid="uid://5gwe6udjtyfa" path="res://particles.gdshader" id="2_7mycd"]
+[ext_resource type="Script" uid="uid://x0ew72tm5sdk" path="res://game/camera/camera_rig.gd" id="3_7mycd"]
+[ext_resource type="Script" uid="uid://btytdxv83mev7" path="res://wind_status.gd" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://b7lciwvco8fqf" path="res://particles.gd" id="3_lquwl"]
+[ext_resource type="Script" uid="uid://bqss3nbssmijk" path="res://time_status.gd" id="7_272bh"]
+[ext_resource type="Script" uid="uid://dx1bbjoa0h1c7" path="res://fps_status.gd" id="9_kek77"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mycd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_55trh"]
+material = SubResource("StandardMaterial3D_7mycd")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1bvp3"]
+
+[sub_resource type="Sky" id="Sky_h2yge"]
+sky_material = SubResource("ProceduralSkyMaterial_1bvp3")
+
+[sub_resource type="Environment" id="Environment_55trh"]
+background_mode = 2
+sky = SubResource("Sky_h2yge")
+
+[sub_resource type="Curve" id="Curve_5vw27"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.50279325, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_272bh"]
+curve = SubResource("Curve_5vw27")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7mycd"]
+lifetime_randomness = 0.2
+emission_shape = 3
+emission_box_extents = Vector3(100, 1, 100)
+direction = Vector3(-0.97507215, 0, 0.22188796)
+spread = 15.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(-0.16385882, 0, 0.037287805)
+alpha_curve = SubResource("CurveTexture_272bh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lquwl"]
+render_priority = 0
+shader = ExtResource("2_7mycd")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_7x2vv"]
+material = SubResource("ShaderMaterial_lquwl")
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p82so"]
+albedo_color = Color(0.29402778, 0.29402778, 0.29402772, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_55trh"]
+material = SubResource("StandardMaterial3D_p82so")
+size = Vector2(85, 92)
+
+[sub_resource type="LabelSettings" id="LabelSettings_55trh"]
+font = ExtResource("2_0xm2m")
+font_size = 10
+
+[node name="Main" type="Control" unique_id=363343873]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Systems" type="Node" parent="." unique_id=948402293]
+
+[node name="TimeSystem" parent="Systems" unique_id=539058300 instance=ExtResource("1_5vw27")]
+is_active = true
+
+[node name="WindSystem" parent="Systems" unique_id=156583365 instance=ExtResource("1_0xm2m")]
+
+[node name="GameContainer" type="SubViewportContainer" parent="." unique_id=414853639]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="GameContainer" unique_id=340649722]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(640, 320)
+render_target_update_mode = 4
+
+[node name="Node3D" type="Node3D" parent="GameContainer/SubViewport" unique_id=999934264]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GameContainer/SubViewport/Node3D" unique_id=696069869]
+mesh = SubResource("BoxMesh_55trh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="GameContainer/SubViewport/Node3D" unique_id=1308372683]
+transform = Transform3D(-0.92587054, 0.20078409, 0.3200773, 0, -0.84712195, 0.53139853, 0.37784088, 0.49200624, 0.78432524, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="GameContainer/SubViewport/Node3D" unique_id=1942768725]
+environment = SubResource("Environment_55trh")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="GameContainer/SubViewport/Node3D" unique_id=1629758322]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3368976, 0)
+cast_shadow = 0
+amount = 1024
+lifetime = 7.0
+transform_align = 1
+transform_align_channel_filter = 1
+process_material = SubResource("ParticleProcessMaterial_7mycd")
+draw_pass_1 = SubResource("QuadMesh_7x2vv")
+script = ExtResource("3_lquwl")
+speed_multiplier = 0.2
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="GameContainer/SubViewport/Node3D" unique_id=1922009098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+mesh = SubResource("PlaneMesh_55trh")
+
+[node name="CameraRig" type="Node3D" parent="GameContainer/SubViewport" unique_id=971519238]
+transform = Transform3D(0.70710677, -0.35355338, 0.6123724, 0, 0.8660254, 0.5, -0.70710677, -0.35355338, 0.6123724, 0, 0, 0)
+script = ExtResource("3_7mycd")
+
+[node name="Camera3D" type="Camera3D" parent="GameContainer/SubViewport/CameraRig" unique_id=1187866178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
+projection = 1
+current = true
+size = 16.0
+near = 0.03
+far = 800.0
+
+[node name="InterfaceContainer" type="SubViewportContainer" parent="." unique_id=1638600498]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="InterfaceContainer" unique_id=459360848]
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(640, 320)
+render_target_update_mode = 4
+
+[node name="WindStatus" type="Label" parent="InterfaceContainer/SubViewport" unique_id=1165855385]
+offset_left = 42.0
+offset_top = 7.0
+offset_right = 82.0
+offset_bottom = 30.0
+text = "Wind"
+label_settings = SubResource("LabelSettings_55trh")
+script = ExtResource("3_h2yge")
+
+[node name="TimeStatus" type="Label" parent="InterfaceContainer/SubViewport" unique_id=1591013200]
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 50.0
+offset_bottom = 30.0
+text = "12:00"
+label_settings = SubResource("LabelSettings_55trh")
+script = ExtResource("7_272bh")
+
+[node name="FpsStatus" type="Label" parent="InterfaceContainer/SubViewport" unique_id=1493030384]
+offset_left = 10.0
+offset_top = 18.0
+offset_right = 50.0
+offset_bottom = 41.0
+text = "FPS"
+label_settings = SubResource("LabelSettings_55trh")
+script = ExtResource("9_kek77")

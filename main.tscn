@@ -90,7 +90,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="GameContainer" unique_id=340649722]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(640, 320)
+size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="Node3D" type="Node3D" parent="GameContainer/SubViewport" unique_id=999934264]
@@ -147,7 +147,7 @@ stretch = true
 transparent_bg = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(640, 320)
+size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="WindStatus" type="Label" parent="InterfaceContainer/SubViewport" unique_id=1165855385]
